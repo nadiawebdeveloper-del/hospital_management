@@ -1,0 +1,208 @@
+const doctorsData = [
+  {
+    id: 1,
+    name: "Dr. Shazia Zahoor",
+    specialty: "Pediatrics",
+    exp: "12 Years Experience",
+    img: "/images/drshazia.png",
+    qualification: "MBBS, FCPS (Pediatrics)",
+    about:
+      "Dr. Shazia Zahoor has over 12 years of experience caring for children, from newborns to teenagers. She focuses on preventive care, vaccinations, and childhood illnesses.",
+    education: [
+      "MBBS — King Edward Medical University",
+      "FCPS Pediatrics — College of Physicians and Surgeons",
+    ],
+    days: "Mon, Wed, Fri",
+    timing: "9:00 AM - 2:00 PM",
+    fee: "Rs. 2,000",
+  },
+  {
+    id: 2,
+    name: "Dr. Tahir Shamsi",
+    specialty: "Psychiatry",
+    exp: "9 Years Experience",
+    img: "/images/drtahir.png",
+    qualification: "MBBS, FCPS (Psychiatry)",
+    about:
+      "Dr. Tahir Shamsi helps patients manage anxiety, depression, and other mental health conditions with a calm, patient-centered approach.",
+    education: [
+      "MBBS — Dow University of Health Sciences",
+      "FCPS Psychiatry — College of Physicians and Surgeons",
+    ],
+    days: "Tue, Thu, Sat",
+    timing: "11:00 AM - 4:00 PM",
+    fee: "Rs. 2,500",
+  },
+  {
+    id: 3,
+    name: "Dr. Aamna Batool Khan",
+    specialty: "Orthopedics",
+    exp: "15 Years Experience",
+    img: "/images/dramna.png",
+    qualification: "MBBS, FCPS (Orthopedic Surgery)",
+    about:
+      "Dr. Aamna Batool Khan specializes in bone, joint, and sports injuries, with 15 years of surgical and non-surgical treatment experience.",
+    education: [
+      "MBBS — Aga Khan University",
+      "FCPS Orthopedic Surgery — College of Physicians and Surgeons",
+    ],
+    days: "Mon, Tue, Thu",
+    timing: "10:00 AM - 3:00 PM",
+    fee: "Rs. 3,000",
+  },
+  {
+    id: 4,
+    name: "Dr. Adeel Butt",
+    specialty: "Cardiology",
+    exp: "18 Years Experience",
+    img: "/images/dradeelbutt.png",
+    qualification: "MBBS, FCPS (Cardiology)",
+    about:
+      "Dr. Adeel Butt is a senior cardiologist with 18 years of experience diagnosing and treating heart conditions.",
+    education: [
+      "MBBS — University of Health Sciences",
+      "FCPS Cardiology — College of Physicians and Surgeons",
+    ],
+    days: "Mon - Fri",
+    timing: "8:00 AM - 1:00 PM",
+    fee: "Rs. 3,500",
+  },
+  {
+    id: 5,
+    name: "Dr. Akram Arif",
+    specialty: "Neurology",
+    exp: "10 Years Experience",
+    img: "/images/drakramarif.png",
+    qualification: "MBBS, FCPS (Neurology)",
+    about:
+      "Dr. Akram Arif treats disorders of the brain and nervous system, including migraines, epilepsy, and stroke recovery.",
+    education: [
+      "MBBS — Allama Iqbal Medical College",
+      "FCPS Neurology — College of Physicians and Surgeons",
+    ],
+    days: "Mon, Wed, Fri",
+    timing: "2:00 PM - 6:00 PM",
+    fee: "Rs. 3,000",
+  },
+  {
+    id: 6,
+    name: "Dr. Yasmin Rashid",
+    specialty: "Gynecology",
+    exp: "8 Years Experience",
+    img: "/images/dryasmin.png",
+    qualification: "MBBS, FCPS (Gynecology & Obstetrics)",
+    about:
+      "Dr. Yasmin Rashid provides compassionate care for women's health, pregnancy, and family planning.",
+    education: [
+      "MBBS — Services Institute of Medical Sciences",
+      "FCPS Gynecology & Obstetrics",
+    ],
+    days: "Tue, Wed, Sat",
+    timing: "10:00 AM - 3:00 PM",
+    fee: "Rs. 2,500",
+  },
+  {
+    id: 7,
+    name: "Dr. Iftikhar",
+    specialty: "Cardiology",
+    exp: "14 Years Experience",
+    img: "/images/driftikhar.png",
+    qualification: "MBBS, FCPS (Cardiology)",
+    about:
+      "Dr. Iftikhar focuses on preventive cardiology and heart disease management for adults of all ages.",
+    education: [
+      "MBBS — Nishtar Medical University",
+      "FCPS Cardiology — College of Physicians and Surgeons",
+    ],
+    days: "Mon, Tue, Fri",
+    timing: "9:00 AM - 1:00 PM",
+    fee: "Rs. 3,200",
+  },
+  {
+    id: 8,
+    name: "Dr. Seemin Jamali",
+    specialty: "Pediatrics",
+    exp: "7 Years Experience",
+    img: "/images/seeminjamali.png",
+    qualification: "MBBS, FCPS (Pediatrics)",
+    about:
+      "Dr. Seemin Jamali is dedicated to the health and well-being of infants, children, and adolescents.",
+    education: [
+      "MBBS — Rawalpindi Medical University",
+      "FCPS Pediatrics — College of Physicians and Surgeons",
+    ],
+    days: "Mon - Thu",
+    timing: "3:00 PM - 7:00 PM",
+    fee: "Rs. 1,800",
+  },
+  {
+    id: 9,
+    name: "Dr. Sania Nishtar",
+    specialty: "Orthopedics",
+    exp: "11 Years Experience",
+    img: "/images/drsania.png",
+    qualification: "MBBS, FCPS (Orthopedic Surgery)",
+    about:
+      "Dr. Sania Nishtar treats fractures, joint pain, and spine conditions with both surgical and physical therapy options.",
+    education: [
+      "MBBS — Fatima Jinnah Medical University",
+      "FCPS Orthopedic Surgery",
+    ],
+    days: "Wed, Thu, Sat",
+    timing: "11:00 AM - 4:00 PM",
+    fee: "Rs. 2,800",
+  },
+  {
+    id: 10,
+    name: "Dr. Shahryar Ahmad Sheikh",
+    specialty: "Neurology",
+    exp: "13 Years Experience",
+    img: "/images/drsheryar.png",
+    qualification: "MBBS, FCPS (Neurology)",
+    about:
+      "Dr. Shahryar Ahmad Sheikh specializes in headache disorders, seizures, and nerve-related conditions.",
+    education: [
+      "MBBS — Shaikh Zayed Medical College",
+      "FCPS Neurology — College of Physicians and Surgeons",
+    ],
+    days: "Mon, Thu, Fri",
+    timing: "9:00 AM - 2:00 PM",
+    fee: "Rs. 3,100",
+  },
+  {
+    id: 11,
+    name: "Dr. Aayesha Qadeer",
+    specialty: "General Medicine",
+    exp: "16 Years Experience",
+    img: "/images/deayeshaqadeer.png",
+    qualification: "MBBS, FCPS (Internal Medicine)",
+    about:
+      "Dr. Aayesha Qadeer provides general checkups, chronic disease management, and health screenings for the whole family.",
+    education: [
+      "MBBS — Punjab Medical College",
+      "FCPS Internal Medicine",
+    ],
+    days: "Mon - Sat",
+    timing: "8:00 AM - 12:00 PM",
+    fee: "Rs. 1,500",
+  },
+  {
+    id: 12,
+    name: "Dr. Usman Tariq",
+    specialty: "Gynecology",
+    exp: "9 Years Experience",
+    img: "/images/drusman.png",
+    qualification: "MBBS, FCPS (Gynecology & Obstetrics)",
+    about:
+      "Dr. Usman Tariq offers complete women's healthcare, from routine checkups to high-risk pregnancy care.",
+    education: [
+      "MBBS — Sindh Medical College",
+      "FCPS Gynecology & Obstetrics",
+    ],
+    days: "Tue, Thu, Sat",
+    timing: "1:00 PM - 5:00 PM",
+    fee: "Rs. 2,600",
+  },
+];
+
+export default doctorsData;

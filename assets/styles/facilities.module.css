@@ -1,0 +1,194 @@
+.container {
+  --teal: #007b7f;
+  --teal-dark: #005f63;
+  --orange: #f59a00;
+  --ink: #333333;
+  --line: #dcdcdc;
+  --soft: #eef5f5;
+
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  margin-bottom: 80px;
+}
+.label {
+  color: var(--teal);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+}
+.heading {
+  font-size: 30px;
+  margin-bottom: 24px;
+  color: var(--ink);
+   text-align: center;
+}
+
+.text {
+  font-size: 15px;
+  color: #555555;
+  margin-bottom: 18px;
+}
+
+
+.sliderWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  
+}
+
+.sliderViewport {
+  width: 100%;
+  overflow: hidden;
+  padding: 20px 0px;
+}
+
+.sliderTrack {
+  display: flex;
+  gap: 24px;
+  will-change: transform;
+}
+
+.FacilityCard {
+  position: relative;
+  flex: 0 0 calc((100% - 48px) / 3);
+  box-sizing: border-box;
+  padding: 32px 28px;
+  background: #ffffff;
+  border: 1px solid #e2eeee;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  text-align: left;
+  overflow: hidden;
+   border: 1px solid #e2eeee;
+  border-top: 4px solid #f28c28;
+}
+.FacilityCard:hover{
+    transform: translateY(-10px);
+  box-shadow: 0 12px 28px rgba(0, 123, 127, 0.15);
+}
+
+
+.FacilityIcon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  color: var(--teal)!important;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+  background: #edf8f8;
+  border-radius: 14px;
+}
+
+.FacilityIcon img {
+  width: 36px;
+  height: 36px;
+    color: var(--teal)!important;
+  object-fit: contain;
+}
+
+.FacilityCard h3 {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 650;
+}
+
+
+.FacilityCard p {
+  margin: 0 0 20px;
+  min-height: 51px;
+  color: #667b7c;
+  font-size: 15px;
+  line-height: 1.7;
+  
+}
+
+.FacilityCard a {
+  display: inline-flex;
+  align-items: center;
+  color: #007b7f;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.FacilityCard a span {
+  margin-left: 5px;
+}
+
+.sliderButton {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d6e9e9;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #007b7f;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sliderButton:hover {
+  background: #007b7f;
+  border-color: #007b7f;
+  color: #ffffff;
+}
+
+.sliderDots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #c9dddd;
+  cursor: pointer;
+}
+
+.activeDot {
+  width: 24px;
+  border-radius: 10px;
+  background: #007b7f;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .FacilityCard {
+    flex: 0 0 calc((100% - 24px) / 2);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .sliderWrapper {
+    gap: 8px;
+  }
+
+  .FacilityCard {
+    flex: 0 0 100%;
+    padding: 26px 22px;
+  }
+
+  .sliderButton {
+    width: 38px;
+    height: 38px;
+    font-size: 25px;
+  }
+}

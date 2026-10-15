@@ -1,0 +1,141 @@
+
+.container {
+  --teal: #007b7f;
+  --teal-dark: #005f63;
+  --orange: #f59a00;
+  --ink: #333333;
+  --line: #dcdcdc;
+  --soft: #eef5f5;
+
+  width: auto;
+}
+
+.label {
+  color: var(--teal);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.heading {
+  font-size: 30px;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+
+.text {
+  font-size: 15px;
+  color: #555555;
+  margin-bottom: 18px;
+}
+
+.valuesSection {
+  padding: 0 20px;
+}
+
+.valuesSection h2 {
+  font-family: var(--font-raleway), sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin: 0 0 12px 0;
+}
+
+.valuesIntro {
+  font-family: var(--font-open-sans), Arial, sans-serif;
+  font-size: 1rem;
+  color: var(--ink);
+  opacity: 0.6;
+  text-align: center;
+  margin: 0 0 50px 0;
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.valueCard {
+  background: #ffffff;
+  padding: 36px 28px;
+  text-align: center;
+  border: 1px solid var(--teal);
+  border-bottom: 3px solid var(--orange);
+  transition: all 0.3s ease;
+}
+
+.valueCard:hover {
+  border-color: var(--teal);
+  box-shadow: 0 8px 24px rgba(0, 123, 127, 0.12);
+  transform: translateY(-8px);
+}
+
+.valueIcon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+  color: var(--teal);
+}
+
+.valueIcon svg {
+  width: 52px;
+  height: 52px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.valueCard h3 {
+  font-family: var(--font-raleway), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 12px 0;
+}
+
+.valueCard p {
+  font-family: var(--font-open-sans), Arial, sans-serif;
+  font-size: 0.9rem;
+  color: var(--ink);
+  opacity: 0.7;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .valuesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .valuesSection {
+    padding: 0 15px;
+  }
+
+  .valuesSection h2 {
+    font-size: 2rem;
+  }
+
+  .valuesIntro {
+    margin-bottom: 35px;
+  }
+
+  .valuesGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .valueCard {
+    padding: 30px 22px;
+  }
+}

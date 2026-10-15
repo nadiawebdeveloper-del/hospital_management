@@ -1,0 +1,126 @@
+/* ---------- Card ---------- */
+.box {
+  --teal: #007b7f;
+  --teal-dark: #005f63;
+  --orange: #f59a00;
+
+  background: #ffffff;
+  border-top: 4px solid var(--orange);
+  box-shadow: 0 10px 30px rgba(0, 60, 62, 0.1);
+  padding: 30px;
+  max-width: 1000px;
+  margin: 0px auto 0; /* pulls the box up over the hero section */
+  position: relative;
+  z-index: 5;
+}
+
+/* ---------- Search row ---------- */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #dddddd;
+  padding: 14px 16px;
+}
+
+.field:focus-within {
+  border-color: var(--teal);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  color: var(--teal);
+  flex-shrink: 0;
+}
+
+.field input {
+  border: 0;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #333333;
+}
+
+.searchBtn {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  background: var(--teal);
+  border: 0;
+  border-bottom: 3px solid var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.searchBtn:hover {
+  background: var(--teal-dark);
+}
+
+.searchBtn svg {
+  width: 20px;
+  height: 20px;
+  color: #ffffff;
+}
+
+/* ---------- Tags ---------- */
+.tags {
+  margin-top: 22px;
+}
+
+.tagsLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 12px;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag {
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  color: #555555;
+  font-size: 13px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.tag:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 700px) {
+  .box {
+    margin-top: 0;
+    padding: 20px;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchBtn {
+    width: 100%;
+    height: 48px;
+  }
+}

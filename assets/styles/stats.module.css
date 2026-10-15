@@ -1,0 +1,97 @@
+
+.container {
+  --teal: #007b7f;
+  --teal-dark: #005f63;
+  --orange: #f59a00;
+  --ink: #333333;
+  --line: #dcdcdc;
+  --soft: #eef5f5;
+
+  width: auto;
+}
+.label {
+  color: var(--teal);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.heading {
+  font-size: 30px;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+
+.text {
+  font-size: 15px;
+  color: #555555;
+  margin-bottom: 18px;
+}
+
+.button {
+  display: inline-block;
+  padding: 12px 26px;
+  background: var(--teal);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  border: 0;
+  border-bottom: 3px solid var(--orange);
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--teal-dark);
+}
+
+.statsSection {
+  padding: 60px 20px;
+}
+
+.statsSection h2 {
+  font-family: var(--font-raleway), sans-serif;
+  font-size: 35px;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin: 0 0 40px 0;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-content: center;
+  gap: 20px;
+}
+
+.statCard {
+  text-align: center;
+  padding: 20px 10px;
+  border: 1px solid var(--teal);
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  border-color: var(--orange);
+  transform: scale(1.05);
+}
+
+.statNumber {
+  
+  font-size: 35;
+  font-weight: 700;
+  color: var(--teal);
+  margin-bottom: 5px;
+}
+
+.statCard:hover .statNumber {
+  color: var(--orange);
+}
+
+.statLabel {
+  font-family: var(--font-open-sans), Arial, sans-serif;
+  color: var(--ink);
+  opacity: 0.7;
+}

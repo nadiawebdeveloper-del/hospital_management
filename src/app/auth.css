@@ -1,0 +1,17 @@
+.auth-page{min-height:100vh;display:grid;place-items:center;padding:32px 16px;background:#f2fbfb}
+.auth-card{width:100%;max-width:440px;background:#fff;border:1px solid #d6e6e7;border-top:4px solid #f59e0b;border-radius:6px;padding:28px}
+.auth-card h1{margin:0 0 4px;color:#00787d;font-size:26px}
+.auth-card .sub{color:#5b6b79;margin:0 0 16px}
+.auth-tabs{display:flex;gap:8px;margin-bottom:12px}
+.auth-tabs button{flex:1;padding:10px;border:1px solid #cfe0e1;background:#fff;color:#14202b;cursor:pointer;font:inherit}
+.auth-tabs button.on{background:#00787d;border-color:#00787d;color:#fff}
+.auth-card label{display:block;margin:12px 0 4px;font-size:14px;color:#44525e}
+.auth-card input,.auth-card select{width:100%;padding:11px;border:1px solid #cfe0e1;border-radius:4px;font:inherit}
+.auth-card input:focus,.auth-card select:focus{outline:2px solid #00787d;outline-offset:1px}
+.auth-card .row{display:flex;gap:10px}
+.auth-card .row>div{flex:1}
+.auth-submit{width:100%;margin-top:18px;padding:12px;background:#00787d;color:#fff;border:0;border-bottom:3px solid #f59e0b;font:inherit;font-weight:700;cursor:pointer}
+.auth-google{width:100%;margin-top:10px;padding:11px;background:#fff;border:1px solid #00787d;color:#00787d;font:inherit;cursor:pointer}
+.auth-error{margin-top:12px;padding:10px;background:#fee2e2;color:#991b1b;border-radius:4px;font-size:14px}
+.auth-foot{text-align:center;margin-top:16px;font-size:14px}
+.auth-foot a{color:#00787d}

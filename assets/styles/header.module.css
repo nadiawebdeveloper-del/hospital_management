@@ -1,0 +1,371 @@
+
+.header {
+  --teal: #007b7f;
+  --teal-dark: #005f63;
+  --orange: #f59a00;
+  --ink: #333333;
+  --line: #dcdcdc;
+  --soft: #eef5f5;
+
+  background: #F4FDFE;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 80px;
+  background: var(--teal);
+  color: #ffffff;
+  border-bottom: 5px solid var(--orange);
+  font-family: var(--font-raleway), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.1;
+  text-align: center;
+  text-decoration: none;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.nav {
+  height: 100%;
+}
+
+.navList {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  font-family: var(--font-raleway), sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--ink);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.navLink:hover,
+.active,
+.navItem.open > .navLink {
+  color: var(--teal);
+  border-bottom-color: var(--teal);
+}
+
+.caret {
+  width: 10px;
+  height: 10px;
+  transition: transform 0.2s;
+}
+
+.navItem.open .caret {
+  transform: rotate(180deg);
+}
+/* ---------- Services/Departments: word + caret button ---------- */
+.navLinkText {
+  color: inherit;
+  text-decoration: none;
+}
+
+.navLinkText:hover {
+  color: var(--teal);
+}
+
+.caretBtn {
+  background: none;
+  border: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: inherit;
+}
+/* ---------- Dropdown ---------- */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--teal);
+  box-shadow: 0 12px 28px rgba(0, 60, 62, 0.14);
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+
+/* Show the dropdown when it is clicked */
+.navItem.open > .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: var(--ink);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.dropdown a:hover {
+  background: var(--soft);
+  color: var(--teal);
+  border-left-color: var(--orange);
+}
+
+/* ---------- Right side ---------- */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.emergency {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-raleway), sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.emergency svg {
+  width: 20px;
+  height: 20px;
+  color: var(--teal);
+}
+
+.emergency:hover {
+  color: var(--teal);
+}
+
+/* ---------- Login button ---------- */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--teal);
+  color: #ffffff;
+  font-family: var(--font-raleway), sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 3px solid var(--orange);
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: var(--teal-dark);
+}
+
+/* ---------- Mobile menu button (hidden on desktop) ---------- */
+.burger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.burger span,
+.burger span::before,
+.burger span::after {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--teal);
+  position: relative;
+}
+
+.burger span::before,
+.burger span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.burger span::before {
+  top: -6px;
+}
+
+.burger span::after {
+  top: 6px;
+}
+
+/* The login item inside the menu is only for mobile */
+.navLogin {
+  display: none;
+}
+
+/* ---------- Desktop only: open dropdown when mouse is over ---------- */
+@media (min-width: 961px) {
+  .hasDropdown:hover > .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .hasDropdown:hover > .navLink {
+    color: var(--teal);
+    border-bottom-color: var(--teal);
+  }
+}
+
+/* ---------- Medium screens ---------- */
+@media (max-width: 1100px) {
+  .emergency span {
+    display: none;
+  }
+
+  .navLink {
+    padding: 0 11px;
+  }
+}
+
+/* ---------- Mobile screens ---------- */
+@media (max-width: 960px) {
+  .inner {
+    height: 72px;
+  }
+
+  .logo {
+    width: 64px;
+    height: 68px;
+    font-size: 11px;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  .btnDesktop {
+    display: none;
+  }
+
+  /* The menu is hidden until you click the button */
+  .nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: auto;
+    background: #ffffff;
+    border-bottom: 1px solid var(--line);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .navOpen {
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .navList {
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 24px 20px;
+  }
+
+  .navItem {
+    flex-direction: column;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .navLink {
+    width: 100%;
+    padding: 14px 0;
+    justify-content: space-between;
+    border-bottom: 0;
+  }
+
+  .navLink:hover,
+  .active,
+  .navItem.open > .navLink {
+    border-bottom: 0;
+  }
+
+  /* Dropdown opens downward inside the menu */
+  .dropdown {
+    position: static;
+    border: 0;
+    border-left: 3px solid var(--teal);
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin-left: 4px;
+    transition: max-height 0.25s ease;
+  }
+
+  .navItem.open > .dropdown {
+    max-height: 400px;
+    padding: 4px 0 10px;
+  }
+
+  .navLogin {
+    display: block;
+    padding: 16px 0 0;
+    border-bottom: 0;
+  }
+
+  .navLogin .btn {
+    display: block;
+    text-align: center;
+  }
+}

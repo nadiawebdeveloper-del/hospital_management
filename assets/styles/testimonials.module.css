@@ -1,0 +1,281 @@
+.testimonials {
+  --teal: #007b7f;
+  --teal-dark: #005f63;
+  --orange: #f59a00;
+  --ink: #333333;
+  --muted: #666666;
+  --soft: #eef5f5;
+
+  padding: 80px 24px;
+  background: #ffffff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Heading */
+
+.heading {
+  max-width: 700px;
+  margin: 0 auto 45px;
+  text-align: center;
+}
+
+.label {
+  display: block;
+  margin-bottom: 10px;
+
+  color: var(--teal);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.heading h2 {
+  margin: 0;
+
+  color: var(--ink);
+  font-size: 38px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.heading h2 span {
+  color: var(--teal);
+}
+
+.heading p {
+  margin: 15px auto 0;
+
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   CAROUSEL
+========================= */
+
+.carousel {
+  width: 100%;
+  overflow: hidden;
+}
+
+.slides {
+  display: flex;
+  gap: 24px;
+
+  width: max-content;
+
+  animation: slide 18s infinite;
+}
+
+.carousel:hover .slides {
+  animation-play-state: paused;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.card {
+  position: relative;
+
+  width: 350px;
+  min-height: 340px;
+
+  padding: 45px 28px 30px;
+
+  background: #ffffff;
+
+  border: 1px solid #e1eeee;
+  border-radius: 16px;
+
+  text-align: left;
+
+  box-shadow: 0 10px 35px rgba(0, 95, 99, 0.08);
+
+  flex-shrink: 0;
+}
+
+.card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 4px;
+
+  background: var(--teal);
+
+  border-radius: 16px 16px 0 0;
+}
+
+
+/* Quote */
+
+.quote {
+  position: absolute;
+
+  top: 13px;
+  left: 22px;
+
+  color: var(--soft);
+
+  font-family: Georgia, serif;
+  font-size: 65px;
+  font-weight: bold;
+
+  line-height: 1;
+}
+
+
+/* Stars */
+
+.stars {
+  margin-bottom: 18px;
+
+  color: var(--orange);
+
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+
+/* Review */
+
+.card p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+
+/* Patient */
+
+.patient {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 28px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--soft);
+  color: var(--teal-dark);
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.patient h3 {
+  margin: 0 0 4px;
+
+  color: var(--teal-dark);
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.patient span {
+  color: #777777;
+
+  font-size: 13px;
+}
+
+
+
+@keyframes slide {
+
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(0);
+  }
+
+  30% {
+    transform: translateX(-374px);
+  }
+
+  50% {
+    transform: translateX(-374px);
+  }
+
+  55% {
+    transform: translateX(-748px);
+  }
+
+  75% {
+    transform: translateX(-748px);
+  }
+
+  80% {
+    transform: translateX(-1122px);
+  }
+
+  95% {
+    transform: translateX(-1122px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+@media (max-width: 1100px) {
+
+  .card {
+    width: 300px;
+  }
+
+}
+@media (max-width: 700px) {
+
+  .testimonials {
+    padding: 60px 16px;
+  }
+
+  .heading h2 {
+    font-size: 28px;
+  }
+
+  .heading p {
+    font-size: 14px;
+  }
+
+  .slides {
+    gap: 15px;
+  }
+
+  .card {
+    width: 290px;
+    min-height: 350px;
+    padding: 45px 24px 28px;
+  }
+
+}
