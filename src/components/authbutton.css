@@ -1,0 +1,145 @@
+.ab-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative
+}
+
+.ab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 22px;
+  background: #00787d;
+  color: #fff;
+  border: 1px solid #00787d;
+  border-bottom: 3px solid #f59e0b;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .2s
+}
+
+.ab-btn:hover {
+  background: #00666a
+}
+
+.ab-ghost {
+  background: #fff;
+  color: #00787d
+}
+
+.ab-ghost:hover {
+  background: #e6f6f6
+}
+
+.ab-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 12px 0 6px;
+  background: #fff;
+  border: 1px solid #cfe0e1;
+  border-bottom: 3px solid #f59e0b;
+  color: #14202b;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer
+}
+
+.ab-profile:hover {
+  border-color: #00787d;
+  border-bottom-color: #f59e0b
+}
+
+.ab-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #00787d;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700
+}
+
+.ab-caret {
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid #00787d;
+  border-bottom: 2px solid #00787d;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform .2s
+}
+
+.ab-caret.up {
+  transform: rotate(-135deg)
+}
+
+.ab-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  background: #fff;
+  border: 1px solid #d6e6e7;
+  border-top: 3px solid #f59e0b;
+  box-shadow: 0 10px 28px rgba(0, 60, 62, .15);
+  z-index: 100;
+  display: flex;
+  flex-direction: column
+}
+
+.ab-head {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e3eeee;
+  display: flex;
+  flex-direction: column;
+  gap: 2px
+}
+
+.ab-head small {
+  color: #5b6b79
+}
+
+.ab-menu a,
+.ab-menu button {
+  padding: 11px 16px;
+  text-align: left;
+  color: #14202b;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer
+}
+
+.ab-menu a:hover,
+.ab-menu button:hover {
+  background: #f2fbfb;
+  color: #00787d
+}
+
+.ab-out {
+  border-top: 1px solid #e3eeee !important;
+  color: #b91c1c !important
+}
+
+@media(max-width:700px) {
+  .ab-name {
+    display: none
+  }
+
+  .ab-btn {
+    padding: 0 14px;
+    height: 38px;
+    font-size: 13px
+  }
+}

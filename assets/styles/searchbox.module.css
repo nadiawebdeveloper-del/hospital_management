@@ -1,0 +1,172 @@
+.wrap {
+    max-width: 1000px;
+    margin: 0px auto 50px;
+    padding: 0 16px;
+    position: relative;
+    z-index: 5
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e1eded;
+    border-top: 3px solid #f59e0b;
+    box-shadow: 0 12px 32px rgba(0, 80, 82, .12);
+    padding: 26px 28px
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch
+}
+
+.field {
+    position: relative;
+    flex: 1;
+    min-width: 0
+}
+
+.field input {
+    width: 100%;
+    height: 48px;
+    padding: 0 44px 0 44px;
+    border: 1px solid #d6e6e7;
+    font: inherit;
+    font-size: 14px;
+    color: #14202b;
+    background: #fff
+}
+
+.field input:focus {
+    outline: 2px solid #00787d;
+    border-color: #00787d
+}
+
+.ic {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00787d;
+    display: flex;
+    pointer-events: none
+}
+
+.pin {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: 0;
+    color: #00787d;
+    cursor: pointer;
+    padding: 8px;
+    display: flex
+}
+
+.go {
+    width: 54px;
+    flex: none;
+    background: #00787d;
+    color: #fff;
+    border: 0;
+    border-bottom: 3px solid #f59e0b;
+    cursor: pointer;
+    display: grid;
+    place-items: center
+}
+
+.go:hover {
+    background: #00666a
+}
+
+.sug {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4px);
+    background: #fff;
+    border: 1px solid #d6e6e7;
+    border-top: 3px solid #f59e0b;
+    box-shadow: 0 12px 28px rgba(0, 60, 62, .15);
+    z-index: 20;
+    list-style: none;
+    margin: 0;
+    padding: 4px 0
+}
+
+.sug li button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    background: none;
+    border: 0;
+    font: inherit;
+    font-size: 14px;
+    color: #14202b;
+    cursor: pointer;
+    text-align: left
+}
+
+.sug li button:hover {
+    background: #f2fbfb;
+    color: #00787d
+}
+
+.sug small {
+    color: #5b6b79;
+    font-size: 12px
+}
+
+.hint {
+    color: #b45309;
+    font-size: 13px;
+    margin: 10px 0 0
+}
+
+.label {
+    margin: 20px 0 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #14202b
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px
+}
+
+.chip {
+    padding: 8px 14px;
+    border: 1px solid #d6e6e7;
+    background: #fff;
+    color: #44525e;
+    font: inherit;
+    font-size: 12.5px;
+    cursor: pointer
+}
+
+.chip:hover {
+    border-color: #00787d;
+    color: #00787d;
+    background: #f2fbfb
+}
+
+@media(max-width:700px) {
+    .row {
+        flex-direction: column
+    }
+
+    .go {
+        width: 100%;
+        height: 48px
+    }
+
+    .card {
+        padding: 18px
+    }
+}
