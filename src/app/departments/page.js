@@ -3,6 +3,20 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import departmentsData from "./departmentsData";
 
+
+const Svg = ({ children }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    {children}
+  </svg>
+);
 export default function DepartmentsPage() {
   return (
     <>
@@ -82,29 +96,59 @@ export default function DepartmentsPage() {
           <p className={styles.label}>Our Approach</p>
           <h2 className={styles.heading}>What Makes Our Care Different</h2>
 
-          <div className={styles.processGrid}>
+                    <div className={styles.processGrid}>
             <div className={styles.processCard}>
-              <span className={styles.processIcon}>👨‍⚕️</span>
+              <span className={styles.processIcon}>
+                <Svg>
+                  <path d="M11 2v2" />
+                  <path d="M5 2v2" />
+                  <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" />
+                  <path d="M8 15a6 6 0 0 0 12 0v-3" />
+                  <circle cx="20" cy="10" r="2" />
+                </Svg>
+              </span>
               <h4>Experienced Specialists</h4>
               <p>Every department is led by doctors with years of focused experience.</p>
             </div>
             <div className={styles.processCard}>
-              <span className={styles.processIcon}>🏥</span>
+              <span className={styles.processIcon}>
+                <Svg>
+                  <path d="M12 6v4" />
+                  <path d="M14 8h-4" />
+                  <path d="M14 14h-4" />
+                  <path d="M14 18h-4" />
+                  <path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2" />
+                  <path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18" />
+                </Svg>
+              </span>
               <h4>Modern Equipment</h4>
               <p>Accurate diagnosis backed by up-to-date medical technology.</p>
             </div>
             <div className={styles.processCard}>
-              <span className={styles.processIcon}>🤝</span>
+              <span className={styles.processIcon}>
+                <Svg>
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </Svg>
+              </span>
               <h4>Coordinated Care</h4>
               <p>Departments work together so nothing falls through the cracks.</p>
             </div>
             <div className={styles.processCard}>
-              <span className={styles.processIcon}>⏱️</span>
+              <span className={styles.processIcon}>
+                <Svg>
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </Svg>
+              </span>
               <h4>Quick Access</h4>
               <p>Fast appointment scheduling across every department.</p>
             </div>
           </div>
-        </div>
+          </div>
+      
       </section>
 
       <section className={styles.container}>

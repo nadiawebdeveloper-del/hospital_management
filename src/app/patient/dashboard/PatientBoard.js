@@ -2,6 +2,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import DashShell from "@/components/DashShell";
+import { IconOverview, IconBook, IconCalendar, IconProfile } from "@/components/NavIcons";
 import { today, fmtDate, fmtTime } from "@/lib/dates";
 
 const supabase = createClient();
@@ -18,6 +19,11 @@ export default function PatientBoard({ me }) {
   const [pmsg, setPmsg] = useState("");
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
 
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get("view");
+    if (["overview", "book", "appointments", "profile"].includes(v)) setView(v);
+  }, []);
+
   const load = useCallback(async () => {
     const { data } = await supabase
       .from("appointments")
@@ -29,9 +35,7 @@ export default function PatientBoard({ me }) {
   }, [me.id]);
 
   useEffect(() => {
-    supabase.from("profiles").select("id, full_name, department")
-      .eq("role", "doctor").eq("is_verified", true)
-      .then(({ data }) => setDoctors(data || []));
+    supabase.rpc("public_doctors").then(({ data }) => setDoctors(data || []));
     load();
     const ch = supabase
       .channel("patient-appts")
@@ -56,7 +60,10 @@ export default function PatientBoard({ me }) {
       reason: f.reason || null,
     });
     setBusy(false);
-    if (error) return setMsg("Could not book: " + error.message);
+    if (error)
+      return setMsg(error.code === "23505"
+        ? "This time is already booked for this doctor. Please choose another time."
+        : "Could not book: " + error.message);
     setF(EMPTY);
     await load();
     setView("appointments");
@@ -99,10 +106,10 @@ export default function PatientBoard({ me }) {
   );
 
   const items = [
-    { key: "overview", label: "Overview" },
-    { key: "book", label: "Book Appointment" },
-    { key: "appointments",  label: "My Appointments" },
-    { key: "profile", label: "My Profile" },
+    { key: "overview", icon: IconOverview, label: "Overview" },
+    { key: "book", icon: IconBook, label: "Book Appointment" },
+    { key: "appointments", icon: IconCalendar, label: "My Appointments" },
+    { key: "profile", icon: IconProfile, label: "My Profile" },
   ];
 
   return (

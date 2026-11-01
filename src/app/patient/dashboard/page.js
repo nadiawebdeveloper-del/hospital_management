@@ -10,5 +10,6 @@ export default async function Page() {
   const { data: me } = await supabase.from("profiles").select("*").eq("id", user.id).single();
   if (!me) redirect("/login");
   if (me.role !== "patient") redirect("/doctor/dashboard");
+  await supabase.rpc("claim_guest_appointments");
   return <PatientBoard me={me} />;
 }

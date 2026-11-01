@@ -41,14 +41,19 @@
   background: var(--orange);
 }
 .infoIcon {
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  background: #e6f6f6;
+  color: #00787d;
+  display: grid;
+  place-items: center;
   margin: 0 auto 14px;
-  background: rgba(0, 123, 127, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
+}
+
+.infoIcon svg {
+  width: 30px;
+  height: 30px;
 }
 .infoCard h3 {
   font-family: var(--font-raleway), sans-serif;

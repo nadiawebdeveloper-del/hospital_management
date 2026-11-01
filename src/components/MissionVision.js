@@ -52,11 +52,8 @@ export default function MissionVision() {
         </div>
       </section>
 
-
-           
-
-          <a href="/about" className={styles.button}>
-            Learn More
+          <a href="/services" className={styles.button}>
+            Explore More
           </a>
         </div>
 

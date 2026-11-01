@@ -1,5 +1,6 @@
 'use client';
 
+import Link from "next/link";
 import styles from '../../assets/styles/AboutPage.module.css';
 import Aboutsection from './Aboutsection';
 import MissionVision from './MissionVision';
@@ -28,6 +29,7 @@ export default function AboutPage() {
         <div className={styles.container}>
           <h2>Why Choose MediCore?</h2>
           <div className={styles.whyGrid}>
+            
             <div className={styles.whyCard}>
               <div className={styles.whyNumber}>01</div>
               <h3>Expert Medical Team</h3>
@@ -58,7 +60,9 @@ export default function AboutPage() {
           <div className={styles.ctaContent}>
             <h2>Ready to Experience Quality Healthcare?</h2>
             <p>Book your appointment today and take the first step towards better health</p>
-            <button className={styles.ctaMainButton}>Book Appointment</button>
+              <Link href="/appointments" className={styles.ctaMainButton}>
+                Book Appointment
+              </Link>
           </div>
         </div>
       </section>

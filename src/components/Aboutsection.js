@@ -24,7 +24,7 @@ export default function About() {
             Today, we are proud to be one of the most trusted healthcare providers in the region, serving thousands of patients annually with expertise, compassion, and cutting-edge technology.
           </p>
 
-          <a href="/about" className={styles.button}>
+          <a href="/contact" className={styles.button}>
             Contact us!
           </a>
         </div>

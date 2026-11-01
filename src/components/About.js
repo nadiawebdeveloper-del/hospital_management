@@ -13,7 +13,7 @@ export default function About() {
             <Image
               src="/images/aboutus.jpg"
               alt="About MediCore"
-              width={900}
+              width={700}
               height={447}
             />
           </span>
@@ -45,7 +45,7 @@ export default function About() {
             well-being of patients at the forefront.
           </p>
 
-          <a href="/about" className={styles.button}>
+          <a href="http://localhost:3000/about" className={styles.button}>
             Learn More
           </a>
         </div>

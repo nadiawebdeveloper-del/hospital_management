@@ -7,7 +7,7 @@ import About from "../components/About.js";
 import Facilities from "../components/Facilities";
 import LogoMarquee from "../components/LogoMarquee.js";
 import Faq from "../components/Faq";
-import Appointmentform from "../components/Appointmentform.js";
+// import Appointmentform from "../components/Appointmentform.js";
 import Testimonials from "../components/Testimonials.js";
 
 
@@ -49,7 +49,7 @@ export default function Home() {
       <LogoMarquee />
       <Testimonials />
       <Faq />
-      <Appointmentform />
+      {/* <Appointmentform /> */}
 
       
     </>

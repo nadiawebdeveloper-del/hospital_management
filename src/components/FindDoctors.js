@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from "../../assets/styles/FindDoctors.module.css";
 
 export default function FindDoctors() {
@@ -130,9 +131,12 @@ export default function FindDoctors() {
                 </div>
               </div>
 
-              <button className={styles.bookButton}>
+              <Link
+                href="/appointments"
+                className={styles.bookButton}
+              >
                 Book appointment
-              </button>
+              </Link>
 
             </div>
           ))}

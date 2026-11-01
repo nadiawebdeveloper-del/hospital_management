@@ -135,12 +135,12 @@ export default function Header() {
             <li className={styles.navItem}>
               <Link href="/doctors" className={linkClass("/doctors")}>Doctors</Link>
             </li>
-            {/* <li className={styles.navItem}>
+           <li className={styles.navItem}>
               <Link href="/appointments" className={linkClass("/appointments")}>Appointments</Link>
-            </li> */}
+            </li> 
             <li className={styles.navItem}>
               <Link href="/contact" className={linkClass("/contact")}>Contact</Link>
-            </li>
+            </li> 
 
             <li className={`${styles.navItem} ${styles.navLogin}`}>
               <Link href="/login" className={styles.btn}>Login</Link>
