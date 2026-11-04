@@ -5,8 +5,44 @@ import { createClient } from "@/lib/supabase/client";
 import DashShell from "@/components/DashShell";
 import { IconOverview, IconCalendar, IconPatients, IconProfile } from "@/components/NavIcons";
 import { today, fmtDate, fmtTime } from "@/lib/dates";
+import { toast } from "@/components/Toast";
+import { localizeRow } from "@/lib/utc";
+import { FilterBar, MonthCalendar, Pager, applyFilter, defaultFilter } from "@/components/ApptFilters";
 
 const supabase = createClient();
+
+function Empty({ title, text }) {
+  return (
+    <div className="empty">
+      <b>{title}</b>
+      {text}
+    </div>
+  );
+}
+
+function Stat({ label, value }) {
+  return (
+    <div className="stat">
+      <div>
+        <span className="lab">{label}</span>
+        <b>{value}</b>
+      </div>
+    </div>
+  );
+}
+
+// Sorting
+const byNew = (a, b) =>
+  String(b.created_at || "").localeCompare(String(a.created_at || "")) ||
+  (b.appointment_date + b.appointment_time).localeCompare(a.appointment_date + a.appointment_time);
+const bySoon = (a, b) =>
+  (a.appointment_date + a.appointment_time).localeCompare(b.appointment_date + b.appointment_time);
+
+function isoDate(d) {
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
 
 export default function DoctorBoard({ me }) {
   const locked = !me.is_verified;
@@ -16,7 +52,10 @@ export default function DoctorBoard({ me }) {
   const [scope, setScope] = useState("mine");
   const [q, setQ] = useState("");
   const [p, setP] = useState({ full_name: me.full_name, phone: me.phone || "" });
-  const [msg, setMsg] = useState("");
+  const [sortBy, setSortBy] = useState("new");
+  const [flt, setFlt] = useState(defaultFilter);
+  const [page, setPage] = useState(1);
+  const [per, setPer] = useState(10);
 
   useEffect(() => {
     const v = new URLSearchParams(window.location.search).get("view");
@@ -31,7 +70,7 @@ export default function DoctorBoard({ me }) {
       .order("appointment_date")
       .order("appointment_time");
     setRows(
-      (data || []).map((r) =>
+      (data || []).map(localizeRow).map((r) =>
         r.patient ? r : { ...r, isGuest: true, patient: { full_name: r.guest_name, phone: r.guest_phone, age: null } }
       )
     );
@@ -47,43 +86,94 @@ export default function DoctorBoard({ me }) {
     return () => { supabase.removeChannel(ch); };
   }, [load, locked]);
 
-  async function update(id, patch) {
+  async function update(id, patch, okMsg) {
     const { error } = await supabase.from("appointments").update(patch).eq("id", id);
-    if (error) alert(error.message);
+    if (error) toast.error(error.message);
+    else if (okMsg) toast.success(okMsg);
     load();
   }
   function accept(a) {
     const clash = mine.some((r) => r.id !== a.id && r.status === "accepted" &&
       r.appointment_date === a.appointment_date && r.appointment_time === a.appointment_time);
     if (clash && !confirm("You already have an accepted appointment at this time. Accept anyway?")) return;
-    update(a.id, { status: "accepted" });
+    update(a.id, { status: "accepted" }, "Appointment accepted");
   }
   function reject(a) {
     const reason = prompt("Reason for rejecting (optional):");
     if (reason === null) return;
-    update(a.id, { status: "rejected", doctor_note: reason || null });
+    update(a.id, { status: "rejected", doctor_note: reason || null }, "Request rejected");
   }
   function note(a) {
     const t = prompt("Note / prescription:", a.doctor_note || "");
-    if (t !== null) update(a.id, { doctor_note: t });
+    if (t !== null) update(a.id, { doctor_note: t }, "Note saved");
   }
   async function saveProfile(e) {
     e.preventDefault();
     const { error } = await supabase.from("profiles")
       .update({ full_name: p.full_name, phone: p.phone }).eq("id", me.id);
-    setMsg(error ? error.message : "Profile saved.");
+    if (error) toast.error(error.message);
+    else toast.success("Profile saved");
   }
 
   const mine = rows.filter((r) => r.doctor_id === me.id);
-  const pending = mine.filter((r) => r.status === "pending");
-  const todays = mine.filter((r) => r.appointment_date === today() && r.status === "accepted");
+  const pending = mine.filter((r) => r.status === "pending").sort(byNew);
+  const todays = mine.filter(
+    (r) => r.appointment_date === today() && ["accepted", "completed"].includes(r.status)
+  );
   const count = (s) => mine.filter((r) => r.status === s).length;
+
+  // Aane wali accepted appointments (sab se qareeb wali pehle)
+  const upcoming = mine
+    .filter((r) => r.status === "accepted" && r.appointment_date >= today())
+    .sort(bySoon);
+  const nextPatient = upcoming[0];
+  const tomorrowIso = isoDate(new Date(new Date(today() + "T00:00:00").getTime() + 86400000));
+  const dayLabel = (d) => (d === today() ? "Today" : d === tomorrowIso ? "Tomorrow" : fmtDate(d));
+
+  // Agle 7 din ka chart
+  const week = [];
+  const base = new Date(today() + "T00:00:00");
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(base);
+    d.setDate(base.getDate() + i);
+    const iso = isoDate(d);
+    week.push({
+      iso,
+      label: d.toLocaleDateString("en-GB", { weekday: "short" }),
+      n: mine.filter((r) => r.appointment_date === iso && ["pending", "accepted", "completed"].includes(r.status)).length,
+      isToday: i === 0,
+    });
+  }
+  const weekMax = Math.max(1, ...week.map((w) => w.n));
+  const weekTotal = week.reduce((s, w) => s + w.n, 0);
+
+  // Recent activity (appointments se bani hui)
+  const activity = [...mine]
+    .sort((a, b) => (b.appointment_date + b.appointment_time).localeCompare(a.appointment_date + a.appointment_time))
+    .slice(0, 6)
+    .map((a) => {
+      const who = a.patient?.full_name || "Patient";
+      const text =
+        a.status === "pending" ? `New request from ${who}`
+        : a.status === "accepted" ? `You accepted ${who}'s appointment`
+        : a.status === "completed" ? `Consultation completed for ${who}`
+        : a.status === "rejected" ? `You rejected ${who}'s request`
+        : `${who}'s appointment was cancelled`;
+      return { id: a.id, status: a.status, text, when: `${fmtDate(a.appointment_date)} • ${fmtTime(a.appointment_time)}` };
+    });
+
+  const statusList = ["pending", "accepted", "completed", "rejected", "cancelled"];
 
   const scoped =
     scope === "mine" ? mine
     : scope === "department" ? rows.filter((r) => r.doctor?.department === me.department)
     : rows;
-  const shown = tab === "all" ? scoped : scoped.filter((r) => r.status === tab);
+  const shown = applyFilter(tab === "all" ? scoped : scoped.filter((r) => r.status === tab), flt)
+    .slice()
+    .sort(sortBy === "new" ? byNew : bySoon);
+  const pages = Math.max(1, Math.ceil(shown.length / per));
+  const pg = Math.min(page, pages);
+  const paged = shown.slice((pg - 1) * per, pg * per);
 
   const pmap = {};
   mine.forEach((r) => {
@@ -102,7 +192,7 @@ export default function DoctorBoard({ me }) {
     </>
   );
 
-    const Actions = ({ a }) =>
+  const Actions = ({ a }) =>
     a.doctor_id !== me.id ? (
       <span className="muted">View only</span>
     ) : (
@@ -132,7 +222,7 @@ export default function DoctorBoard({ me }) {
   const scopes = [["mine", "My appointments"], ["department", "My department"], ["all", "All doctors"]];
 
   return (
-    <DashShell title="Doctor Panel" name={`Dr. ${p.full_name}`}
+    <DashShell title="Doctor Panel" name={`Welcome, Dr. ${p.full_name}`}
       subtitle={`${me.department || ""} department`} items={items} view={view} setView={setView}>
       {locked ? (
         <div className="panel">
@@ -143,102 +233,246 @@ export default function DoctorBoard({ me }) {
         <>
           {view === "overview" && (
             <>
+              {nextPatient ? (
+                <div className="nextbanner">
+                  <div>
+                    <small>Next appointment • {dayLabel(nextPatient.appointment_date)}</small>
+                    <h2>{fmtTime(nextPatient.appointment_time)} — {nextPatient.patient?.full_name}</h2>
+                    <p>{nextPatient.reason || "No reason given"}{nextPatient.patient?.phone ? `  •  ${nextPatient.patient.phone}` : ""}</p>
+                  </div>
+                  <Link className="b on" href={`/doctor/consultation/${nextPatient.id}`}>Start consultation</Link>
+                </div>
+              ) : (
+                <div className="nextbanner">
+                  <div>
+                    <small>Next appointment</small>
+                    <h2>No one waiting</h2>
+                    <p>Koi accepted appointment baaki nahi hai.</p>
+                  </div>
+                </div>
+              )}
+
               <div className="stats">
-                <div className="stat"><b>{pending.length}</b>Waiting for response</div>
-                <div className="stat"><b>{todays.length}</b>Today's appointments</div>
-                <div className="stat"><b>{count("accepted")}</b>Upcoming accepted</div>
-                <div className="stat"><b>{Object.keys(pmap).length}</b>Total patients</div>
+                <Stat label="Today's appointments" value={todays.length} />
+                <Stat label="Pending requests" value={pending.length} />
+                <Stat label="Completed" value={count("completed")} />
+                <Stat label="Total patients" value={Object.keys(pmap).length} />
               </div>
-              <section className="panel">
-                <h2>Needs your response</h2>
-                <table>
-                  <thead><tr><th>Patient</th><th>Phone</th><th>Date</th><th>Time</th><th>Reason</th><th></th></tr></thead>
-                  <tbody>
-                    {pending.slice(0, 5).map((a) => (
-                      <tr key={a.id}>
-                        <td><Who a={a} /></td><td>{a.patient?.phone || "-"}</td>
-                        <td>{fmtDate(a.appointment_date)}</td><td>{fmtTime(a.appointment_time)}</td>
-                        <td><div className="wrap">{a.reason || "-"}</div></td>
-                        <td><Actions a={a} /></td>
-                      </tr>
+
+              <div className="dgrid">
+                {/* ---------- Left column ---------- */}
+                <div>
+                  <section className="panel">
+                    <h2>Incoming requests {pending.length > 0 && <span className="badge" style={{ marginLeft: 8 }}>{pending.length}</span>}</h2>
+                    {pending.length ? (
+                      <table>
+                        <thead><tr><th>Patient</th><th>Phone</th><th>Date</th><th>Time</th><th>Reason</th><th></th></tr></thead>
+                        <tbody>
+                          {pending.slice(0, 5).map((a) => (
+                            <tr key={a.id}>
+                              <td><Who a={a} /></td><td>{a.patient?.phone || "-"}</td>
+                              <td>{fmtDate(a.appointment_date)}</td><td>{fmtTime(a.appointment_time)}</td>
+                              <td><div className="wrap">{a.reason || "-"}</div></td>
+                              <td><Actions a={a} /></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <Empty title="No pending requests" text="Jab koi patient appointment bhejega to yahan nazar aayegi." />
+                    )}
+                    {pending.length > 5 && (
+                      <button className="b ghost" style={{ marginTop: 12 }} onClick={() => setView("appointments")}>
+                        View all {pending.length} requests
+                      </button>
+                    )}
+                  </section>
+
+                  <section className="panel">
+                    <h2>Today's schedule</h2>
+                    {todays.length ? (
+                      <table>
+                        <thead><tr><th>Time</th><th>Patient</th><th>Phone</th><th>Reason</th><th>Status</th><th></th></tr></thead>
+                        <tbody>
+                          {todays.map((a) => (
+                            <tr key={a.id}>
+                              <td>{fmtTime(a.appointment_time)}</td>
+                              <td><Who a={a} /></td>
+                              <td>{a.patient?.phone || "-"}</td>
+                              <td><div className="wrap">{a.reason || "-"}</div></td>
+                              <td><span className={`pill ${a.status}`}>{a.status}</span></td>
+                              <td><Actions a={a} /></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <Empty title="Nothing scheduled for today" text="Aaj koi accepted appointment nahi hai." />
+                    )}
+                  </section>
+
+                  <section className="panel">
+                    <h2>Upcoming appointments</h2>
+                    {upcoming.length ? (
+                      <table>
+                        <thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Reason</th><th></th></tr></thead>
+                        <tbody>
+                          {upcoming.slice(0, 5).map((a) => (
+                            <tr key={a.id}>
+                              <td>{fmtDate(a.appointment_date)}</td>
+                              <td>{fmtTime(a.appointment_time)}</td>
+                              <td><Who a={a} /></td>
+                              <td><div className="wrap">{a.reason || "-"}</div></td>
+                              <td><Actions a={a} /></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <Empty title="No upcoming appointments" text="Accept ki hui aane wali appointments yahan nazar aayengi." />
+                    )}
+                    <button className="b ghost" style={{ marginTop: 12 }} onClick={() => { setTab("all"); setView("appointments"); }}>
+                      Open calendar
+                    </button>
+                  </section>
+                </div>
+
+                {/* ---------- Right column ---------- */}
+                <div>
+                  <section className="panel">
+                    <h2>Next 7 days</h2>
+                    <div className="week">
+                      {week.map((w) => (
+                        <div key={w.iso} className={`col ${w.isToday ? "today" : ""}`}>
+                          <span className="num">{w.n}</span>
+                          <div className="bar" style={{ height: `${(w.n / weekMax) * 80}px` }} />
+                          <span className="day">{w.isToday ? "Today" : w.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="note" style={{ marginTop: 10 }}>{weekTotal} appointment(s) is hafte</p>
+                  </section>
+
+                  <section className="panel">
+                    <h2>Recent activity</h2>
+                    {activity.length ? (
+                      <ul className="feed">
+                        {activity.map((x) => (
+                          <li key={x.id}>
+                            <span className={`dot ${x.status}`} />
+                            <div>
+                              <p>{x.text}</p>
+                              <small>{x.when}</small>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <Empty title="No activity yet" text="Appointments aate hi yahan history nazar aayegi." />
+                    )}
+                  </section>
+
+                  <section className="panel">
+                    <h2>Appointments summary</h2>
+                    {statusList.map((s) => (
+                      <div className="brk" key={s}>
+                        <div className="row"><span>{s}</span><b>{count(s)}</b></div>
+                        <div className="track">
+                          <div className={`fill ${s}`} style={{ width: `${mine.length ? (count(s) / mine.length) * 100 : 0}%` }} />
+                        </div>
+                      </div>
                     ))}
-                    {!pending.length && <tr><td colSpan={6} className="muted">No pending requests.</td></tr>}
-                  </tbody>
-                </table>
-              </section>
-              <section className="panel">
-                <h2>Today's schedule</h2>
-                <table>
-                  <thead><tr><th>Time</th><th>Patient</th><th>Phone</th><th>Reason</th><th></th></tr></thead>
-                  <tbody>
-                    {todays.map((a) => (
-                      <tr key={a.id}>
-                        <td>{fmtTime(a.appointment_time)}</td><td><Who a={a} /></td><td>{a.patient?.phone || "-"}</td>
-                        <td><div className="wrap">{a.reason || "-"}</div></td><td><Actions a={a} /></td>
-                      </tr>
-                    ))}
-                    {!todays.length && <tr><td colSpan={5} className="muted">Nothing scheduled for today.</td></tr>}
-                  </tbody>
-                </table>
-              </section>
+                  </section>
+                </div>
+              </div>
             </>
           )}
 
           {view === "appointments" && (
-            <section className="panel">
-              <h2>Appointments</h2>
-              <div className="tabs2">
-                {scopes.map(([k, label]) => (
-                  <button key={k} className={`b ghost ${scope === k ? "on" : ""}`} onClick={() => setScope(k)}>{label}</button>
-                ))}
-              </div>
-              <div className="tabs2">
-                {["pending", "accepted", "completed", "rejected", "cancelled", "all"].map((t) => (
-                  <button key={t} className={`b ghost ${tab === t ? "on" : ""}`} onClick={() => setTab(t)}>
-                    {t[0].toUpperCase() + t.slice(1)}
-                  </button>
-                ))}
-              </div>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Patient</th><th>Phone</th>{scope !== "mine" && <th>Doctor</th>}
-                    <th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {shown.map((a) => (
-                    <tr key={a.id}>
-                      <td><Who a={a} /></td><td>{a.patient?.phone || "-"}</td>
-                      {scope !== "mine" && <td>Dr. {a.doctor?.full_name}<div className="note">{a.doctor?.department}</div></td>}
-                      <td>{fmtDate(a.appointment_date)}</td><td>{fmtTime(a.appointment_time)}</td>
-                      <td><div className="wrap">{a.reason || "-"}{a.doctor_note && <div className="note">Note: {a.doctor_note}</div>}</div></td>
-                      <td><span className={`pill ${a.status}`}>{a.status}</span></td>
-                      <td><Actions a={a} /></td>
-                    </tr>
+            <div className="applayout">
+              <section className="panel appmain">
+                <h2>Appointments</h2>
+                <div className="tabs2">
+                  {scopes.map(([k, label]) => (
+                    <button key={k} className={`b ghost ${scope === k ? "on" : ""}`} onClick={() => { setScope(k); setPage(1); }}>{label}</button>
                   ))}
-                  {!shown.length && <tr><td colSpan={8} className="muted">No appointments here.</td></tr>}
-                </tbody>
-              </table>
-            </section>
+                </div>
+                <div className="tabs2">
+                  {["pending", "accepted", "completed", "rejected", "cancelled", "all"].map((t) => (
+                    <button key={t} className={`b ghost ${tab === t ? "on" : ""}`} onClick={() => { setTab(t); setPage(1); }}>
+                      {t[0].toUpperCase() + t.slice(1)}
+                    </button>
+                  ))}
+                </div>
+                <FilterBar value={flt} onChange={(v) => { setFlt(v); setPage(1); }} rows={scoped}>
+                  <select value={sortBy} onChange={(e) => { setSortBy(e.target.value); setPage(1); }}>
+                    <option value="new">Sort: Newly booked</option>
+                    <option value="soon">Sort: Soonest first</option>
+                  </select>
+                </FilterBar>
+
+                {paged.length ? (
+                  <div className="tablewrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Patient</th><th>Phone</th>{scope !== "mine" && <th>Doctor</th>}
+                          <th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {paged.map((a) => (
+                          <tr key={a.id}>
+                            <td><Who a={a} /></td><td>{a.patient?.phone || "-"}</td>
+                            {scope !== "mine" && <td>Dr. {a.doctor?.full_name}<div className="note">{a.doctor?.department}</div></td>}
+                            <td>{fmtDate(a.appointment_date)}</td><td>{fmtTime(a.appointment_time)}</td>
+                            <td><div className="wrap">{a.reason || "-"}{a.doctor_note && <div className="note">Note: {a.doctor_note}</div>}</div></td>
+                            <td><span className={`pill ${a.status}`}>{a.status}</span></td>
+                            <td><Actions a={a} /></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <Empty title="No appointments here" text="Is category ya filter mein abhi koi appointment nahi hai." />
+                )}
+                <Pager page={pg} pages={pages} total={shown.length} per={per} onPage={setPage}
+                  onPer={(n) => { setPer(n); setPage(1); }} />
+              </section>
+
+              <aside className="appside">
+                <section className="panel">
+                  <h2>Calendar</h2>
+                  <MonthCalendar
+                    rows={scoped}
+                    selected={flt.date}
+                    onPick={(d) => { setTab("all"); setPage(1); setFlt({ ...defaultFilter, slot: flt.slot, date: flt.date === d ? "" : d }); }}
+                  />
+                </section>
+              </aside>
+            </div>
           )}
 
           {view === "patients" && (
             <section className="panel">
               <h2>My patients</h2>
               <input placeholder="Search by name…" value={q} onChange={(e) => setQ(e.target.value)} style={{ maxWidth: 320, marginBottom: 12 }} />
-              <table>
-                <thead><tr><th>Name</th><th>Age</th><th>Phone</th><th>Visits</th><th>Last visit</th></tr></thead>
-                <tbody>
-                  {patients.map((x, i) => (
-                    <tr key={i}>
-                      <td>{x.full_name}{x.isGuest && <span className="pill" style={{ marginLeft: 6 }}>Guest</span>}</td>
-                      <td>{x.age ?? "-"}</td><td>{x.phone || "-"}</td><td>{x.visits}</td><td>{fmtDate(x.last)}</td>
-                    </tr>
-                  ))}
-                  {!patients.length && <tr><td colSpan={5} className="muted">No patients found.</td></tr>}
-                </tbody>
-              </table>
+              {patients.length ? (
+                <table>
+                  <thead><tr><th>Name</th><th>Age</th><th>Phone</th><th>Visits</th><th>Last visit</th></tr></thead>
+                  <tbody>
+                    {patients.map((x, i) => (
+                      <tr key={i}>
+                        <td>{x.full_name}{x.isGuest && <span className="pill" style={{ marginLeft: 6 }}>Guest</span>}</td>
+                        <td>{x.age ?? "-"}</td><td>{x.phone || "-"}</td><td>{x.visits}</td><td>{fmtDate(x.last)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <Empty title="No patients found" text="Jin patients ki appointment hogi woh yahan aayenge." />
+              )}
             </section>
           )}
 
@@ -254,7 +488,6 @@ export default function DoctorBoard({ me }) {
                   <div><label>License no.</label><input disabled value={me.license_no || ""} /></div>
                 </div>
                 <button className="b" style={{ marginTop: 14 }}>Save changes</button>
-                {msg && <p className={msg.includes("saved") ? "ok" : "err"}>{msg}</p>}
               </form>
             </section>
           )}
