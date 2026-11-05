@@ -96,7 +96,6 @@ export default function ConsultationForm({ appt, patient, consult, savedMeds }) 
       if (error) { setBusy(false); return setMsg({ t: "err", s: error.message }); }
     }
 
-    // Dawaiyan: purani hata kar nayi likhna
     const del = await supabase.from("prescription_items").delete().eq("consultation_id", id);
     if (del.error) { setBusy(false); return setMsg({ t: "err", s: del.error.message }); }
 

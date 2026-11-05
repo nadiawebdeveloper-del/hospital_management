@@ -213,7 +213,7 @@ export default function PatientBoard({ me }) {
         </tbody>
       </table></div>
     ) : (
-      <Empty title="No appointments yet" text="Apni pehli appointment book karein." />
+      <Empty title="No appointments yet" text="Book your first appointment to get started." />
     );
 
   const items = [
@@ -361,13 +361,13 @@ export default function PatientBoard({ me }) {
                       </tbody>
                     </table>
                   ) : (
-                    <p className="muted">Is visit mein koi dawai nahi likhi gayi.</p>
+                    <p className="muted">No medicines were prescribed in this visit.</p>
                   )}
                 </div>
               );
             })
           ) : (
-            <Empty title="No prescriptions yet" text="Doctor jab consultation finish karega to prescription yahan nazar aayegi." />
+            <Empty title="No prescriptions yet" text="Your prescriptions will appear here once your doctor finishes a consultation." />
           )}
         </section>
       )}

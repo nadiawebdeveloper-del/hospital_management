@@ -247,7 +247,7 @@ export default function DoctorBoard({ me }) {
                   <div>
                     <small>Next appointment</small>
                     <h2>No one waiting</h2>
-                    <p>Koi accepted appointment baaki nahi hai.</p>
+                    <p>There are no accepted appointments left.</p>
                   </div>
                 </div>
               )}
@@ -279,7 +279,7 @@ export default function DoctorBoard({ me }) {
                         </tbody>
                       </table>
                     ) : (
-                      <Empty title="No pending requests" text="Jab koi patient appointment bhejega to yahan nazar aayegi." />
+                      <Empty title="No pending requests" text="New appointment requests from patients will appear here." />
                     )}
                     {pending.length > 5 && (
                       <button className="b ghost" style={{ marginTop: 12 }} onClick={() => setView("appointments")}>
@@ -307,7 +307,7 @@ export default function DoctorBoard({ me }) {
                         </tbody>
                       </table>
                     ) : (
-                      <Empty title="Nothing scheduled for today" text="Aaj koi accepted appointment nahi hai." />
+                      <Empty title="Nothing scheduled for today" text="You have no accepted appointments today." />
                     )}
                   </section>
 
@@ -329,7 +329,7 @@ export default function DoctorBoard({ me }) {
                         </tbody>
                       </table>
                     ) : (
-                      <Empty title="No upcoming appointments" text="Accept ki hui aane wali appointments yahan nazar aayengi." />
+                      <Empty title="No upcoming appointments" text="Accepted upcoming appointments will appear here." />
                     )}
                     <button className="b ghost" style={{ marginTop: 12 }} onClick={() => { setTab("all"); setView("appointments"); }}>
                       Open calendar
@@ -350,7 +350,7 @@ export default function DoctorBoard({ me }) {
                         </div>
                       ))}
                     </div>
-                    <p className="note" style={{ marginTop: 10 }}>{weekTotal} appointment(s) is hafte</p>
+                    <p className="note" style={{ marginTop: 10 }}>{weekTotal} appointment(s) in the next 7 days</p>
                   </section>
 
                   <section className="panel">
@@ -368,7 +368,7 @@ export default function DoctorBoard({ me }) {
                         ))}
                       </ul>
                     ) : (
-                      <Empty title="No activity yet" text="Appointments aate hi yahan history nazar aayegi." />
+                      <Empty title="No activity yet" text="Your appointment history will appear here." />
                     )}
                   </section>
 
@@ -435,7 +435,7 @@ export default function DoctorBoard({ me }) {
                     </table>
                   </div>
                 ) : (
-                  <Empty title="No appointments here" text="Is category ya filter mein abhi koi appointment nahi hai." />
+                  <Empty title="No appointments here" text="No appointments match this category or filter." />
                 )}
                 <Pager page={pg} pages={pages} total={shown.length} per={per} onPage={setPage}
                   onPer={(n) => { setPer(n); setPage(1); }} />
@@ -471,7 +471,7 @@ export default function DoctorBoard({ me }) {
                   </tbody>
                 </table>
               ) : (
-                <Empty title="No patients found" text="Jin patients ki appointment hogi woh yahan aayenge." />
+                <Empty title="No patients found" text="Patients who book with you will appear here." />
               )}
             </section>
           )}
