@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import DashShell from "@/components/DashShell";
@@ -47,7 +48,9 @@ function isoDate(d) {
 export default function DoctorBoard({ me }) {
   const locked = !me.is_verified;
   const [rows, setRows] = useState([]);
-  const [view, setView] = useState("overview");
+  const sp = useSearchParams();
+  const v0 = sp.get("view");
+  const [view, setView] = useState(["overview", "appointments", "patients", "profile"].includes(v0) ? v0 : "overview");
   const [tab, setTab] = useState("pending");
   const [scope, setScope] = useState("mine");
   const [q, setQ] = useState("");
@@ -56,11 +59,6 @@ export default function DoctorBoard({ me }) {
   const [flt, setFlt] = useState(defaultFilter);
   const [page, setPage] = useState(1);
   const [per, setPer] = useState(10);
-
-  useEffect(() => {
-    const v = new URLSearchParams(window.location.search).get("view");
-    if (["overview", "appointments", "patients", "profile"].includes(v)) setView(v);
-  }, []);
 
   const load = useCallback(async () => {
     if (locked) return;
@@ -77,6 +75,7 @@ export default function DoctorBoard({ me }) {
   }, [locked]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     load();
     if (locked) return;
     const ch = supabase
@@ -184,7 +183,7 @@ export default function DoctorBoard({ me }) {
   });
   const patients = Object.values(pmap).filter((x) => (x.full_name || "").toLowerCase().includes(q.toLowerCase()));
 
-  const Who = ({ a }) => (
+  const renderWho = (a) => (
     <>
       {a.patient?.full_name}
       {a.isGuest && <span className="pill" style={{ marginLeft: 6 }}>Guest</span>}
@@ -192,7 +191,7 @@ export default function DoctorBoard({ me }) {
     </>
   );
 
-  const Actions = ({ a }) =>
+  const renderActions = (a) =>
     a.doctor_id !== me.id ? (
       <span className="muted">View only</span>
     ) : (
@@ -270,10 +269,10 @@ export default function DoctorBoard({ me }) {
                         <tbody>
                           {pending.slice(0, 5).map((a) => (
                             <tr key={a.id}>
-                              <td><Who a={a} /></td><td>{a.patient?.phone || "-"}</td>
+                              <td>{renderWho(a)}</td><td>{a.patient?.phone || "-"}</td>
                               <td>{fmtDate(a.appointment_date)}</td><td>{fmtTime(a.appointment_time)}</td>
                               <td><div className="wrap">{a.reason || "-"}</div></td>
-                              <td><Actions a={a} /></td>
+                              <td>{renderActions(a)}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -289,7 +288,7 @@ export default function DoctorBoard({ me }) {
                   </section>
 
                   <section className="panel">
-                    <h2>Today's schedule</h2>
+                    <h2>Today&apos;s schedule</h2>
                     {todays.length ? (
                       <table>
                         <thead><tr><th>Time</th><th>Patient</th><th>Phone</th><th>Reason</th><th>Status</th><th></th></tr></thead>
@@ -297,11 +296,11 @@ export default function DoctorBoard({ me }) {
                           {todays.map((a) => (
                             <tr key={a.id}>
                               <td>{fmtTime(a.appointment_time)}</td>
-                              <td><Who a={a} /></td>
+                              <td>{renderWho(a)}</td>
                               <td>{a.patient?.phone || "-"}</td>
                               <td><div className="wrap">{a.reason || "-"}</div></td>
                               <td><span className={`pill ${a.status}`}>{a.status}</span></td>
-                              <td><Actions a={a} /></td>
+                              <td>{renderActions(a)}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -321,9 +320,9 @@ export default function DoctorBoard({ me }) {
                             <tr key={a.id}>
                               <td>{fmtDate(a.appointment_date)}</td>
                               <td>{fmtTime(a.appointment_time)}</td>
-                              <td><Who a={a} /></td>
+                              <td>{renderWho(a)}</td>
                               <td><div className="wrap">{a.reason || "-"}</div></td>
-                              <td><Actions a={a} /></td>
+                              <td>{renderActions(a)}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -423,12 +422,12 @@ export default function DoctorBoard({ me }) {
                       <tbody>
                         {paged.map((a) => (
                           <tr key={a.id}>
-                            <td><Who a={a} /></td><td>{a.patient?.phone || "-"}</td>
+                            <td>{renderWho(a)}</td><td>{a.patient?.phone || "-"}</td>
                             {scope !== "mine" && <td>Dr. {a.doctor?.full_name}<div className="note">{a.doctor?.department}</div></td>}
                             <td>{fmtDate(a.appointment_date)}</td><td>{fmtTime(a.appointment_time)}</td>
                             <td><div className="wrap">{a.reason || "-"}{a.doctor_note && <div className="note">Note: {a.doctor_note}</div>}</div></td>
                             <td><span className={`pill ${a.status}`}>{a.status}</span></td>
-                            <td><Actions a={a} /></td>
+                            <td>{renderActions(a)}</td>
                           </tr>
                         ))}
                       </tbody>

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import DashShell from "@/components/DashShell";
 import { IconOverview, IconBook, IconCalendar, IconProfile } from "@/components/NavIcons";
@@ -53,7 +54,9 @@ function vitalsText(v) {
 }
 
 export default function PatientBoard({ me }) {
-  const [view, setView] = useState("overview");
+  const sp = useSearchParams();
+  const v0 = sp.get("view");
+  const [view, setView] = useState(["overview", "book", "appointments", "prescriptions", "profile"].includes(v0) ? v0 : "overview");
   const [doctors, setDoctors] = useState([]);
   const [rows, setRows] = useState([]);
   const [rx, setRx] = useState([]);
@@ -69,11 +72,6 @@ export default function PatientBoard({ me }) {
   const [p, setP] = useState({ full_name: me.full_name, phone: me.phone || "", age: me.age ?? "" });
   const [pmsg, setPmsg] = useState("");
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
-
-  useEffect(() => {
-    const v = new URLSearchParams(window.location.search).get("view");
-    if (["overview", "book", "appointments", "prescriptions", "profile"].includes(v)) setView(v);
-  }, []);
 
   const load = useCallback(async () => {
     const { data } = await supabase
@@ -97,6 +95,8 @@ export default function PatientBoard({ me }) {
 
   useEffect(() => {
     supabase.rpc("public_doctors").then(({ data }) => setDoctors(data || []));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     load();
     loadRx();
     const ch = supabase
@@ -189,10 +189,10 @@ export default function PatientBoard({ me }) {
     .sort((a, b) => (a.appointment_date + a.appointment_time).localeCompare(b.appointment_date + b.appointment_time));
   const upcoming = upcomingList[0];
 
-  const Table = ({ list }) =>
+  const renderTable = (list) =>
     list.length ? (
       <div className="tablewrap"><table>
-        <thead><tr><th>Doctor</th><th>Department</th><th>Date</th><th>Time</th><th>Status</th><th>Doctor's note</th><th></th></tr></thead>
+        <thead><tr><th>Doctor</th><th>Department</th><th>Date</th><th>Time</th><th>Status</th><th>Doctor&apos;s note</th><th></th></tr></thead>
         <tbody>
           {list.map((a) => (
             <tr key={a.id}>
@@ -254,7 +254,7 @@ export default function PatientBoard({ me }) {
           </section>
           <section className="panel">
             <h2>Recent appointments</h2>
-            <Table list={recent.slice(0, 5)} />
+            {renderTable(recent.slice(0, 5))}
           </section>
         </>
       )}
@@ -295,7 +295,7 @@ export default function PatientBoard({ me }) {
                 <option value="date">Sort: Appointment date</option>
               </select>
             </FilterBar>
-            <Table list={paged} />
+            {renderTable(paged)}
             <Pager page={pg} pages={pages} total={sortedRows.length} per={per} onPage={setPage}
               onPer={(n) => { setPer(n); setPage(1); }} />
           </section>

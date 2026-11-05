@@ -27,7 +27,7 @@ export default function ConsultationForm({ appt, patient, consult, savedMeds }) 
   const c = consult;
   const [cid, setCid] = useState(c?.id || null);
   const [finalized, setFinalized] = useState(c?.status === "final");
-  const locked = !!c && c.status === "final" && Date.now() - new Date(c.finalized_at).getTime() > 24 * 3600 * 1000;
+  const [locked] = useState(() => !!c && c.status === "final" && Date.now() - new Date(c.finalized_at).getTime() > 24 * 3600 * 1000);
 
   const [f, setF] = useState({
     bp: c?.bp ?? "",
