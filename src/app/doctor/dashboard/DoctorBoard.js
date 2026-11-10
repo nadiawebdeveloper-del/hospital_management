@@ -32,7 +32,7 @@ function Stat({ label, value }) {
   );
 }
 
-// Sorting
+
 const byNew = (a, b) =>
   String(b.created_at || "").localeCompare(String(a.created_at || "")) ||
   (b.appointment_date + b.appointment_time).localeCompare(a.appointment_date + a.appointment_time);
@@ -75,7 +75,7 @@ export default function DoctorBoard({ me }) {
   }, [locked]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+   
     load();
     if (locked) return;
     const ch = supabase

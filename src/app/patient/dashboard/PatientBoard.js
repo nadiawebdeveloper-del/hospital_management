@@ -95,8 +95,7 @@ export default function PatientBoard({ me }) {
 
   useEffect(() => {
     supabase.rpc("public_doctors").then(({ data }) => setDoctors(data || []));
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+  
     load();
     loadRx();
     const ch = supabase
